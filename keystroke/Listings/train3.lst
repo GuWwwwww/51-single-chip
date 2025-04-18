@@ -1,0 +1,298 @@
+C51 COMPILER V9.54   TRAIN3                                                                11/05/2024 22:27:44 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TRAIN3
+OBJECT MODULE PLACED IN .\Objects\train3.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE train3.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\tr
+                    -ain3.lst) TABS(2) OBJECT(.\Objects\train3.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<math.h>
+   3          #define N 8 
+   4          #define Wx_port P2
+   5          #define Dx_port P0
+   6          sbit k1=P3^0;
+   7          sbit k2=P3^1;
+   8          sbit k3=P3^2;
+   9          sbit k4=P3^3;
+  10          sbit o1=P3^4;
+  11          sbit o2=P3^5;
+  12          sbit o3=P3^6;
+  13          sbit o4=P3^7;
+  14          bit flag=0;
+  15          bit flag_p=0;
+  16          char sign=1; //定义符号位
+  17          unsigned char count=0; //记录小数点后面的位数
+  18          unsigned char disp_code[8]={0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x3f};
+  19          unsigned char code seg_mode[11]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f,0x00};
+  20          unsigned char cur_sta[4][4]={{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};
+  21          unsigned char pre_sta[4][4]={{1,1,1,1},{1,1,1,1},{1,1,1,1},{1,1,1,1}};
+  22          
+  23          void delay_ms(unsigned char z)
+  24          {
+  25   1        unsigned int i,j;
+  26   1        for(i=0;i<z;i++)
+  27   1          for(j=0;j<125;j++);
+  28   1      }
+  29          
+  30          void  seg_led_scan()
+  31          {
+  32   1        static unsigned char i=0;
+  33   1        Wx_port=(0xfe<<i)|(0xfe>>(8-i));//位选信号，控制哪个数码管亮
+  34   1        Dx_port=disp_code[i]; //段选信号，控制亮什么
+  35   1        delay_ms(1);//控制刷新率
+  36   1        Dx_port=0x00;//消影
+  37   1        i++;
+  38   1        if(i==N) i=0;
+  39   1      }
+  40          
+  41          void cur_sta_update()
+  42          {
+  43   1        static unsigned char buff[4][4]={{0xff,0xff,0xff,0xff},{0xff,0xff,0xff,0xff},{0xff,0xff,0xff,0xff},{0xff,
+             -0xff,0xff,0xff}};
+  44   1        unsigned char i=0;
+  45   1        static unsigned char j=0; 
+  46   1        //消抖              
+  47   1        switch(j)
+  48   1        {
+  49   2          case 0: o1=0;o2=1;o3=1;o4=1;break;
+  50   2          case 1: o1=1;o2=0;o3=1;o4=1;break;
+  51   2          case 2: o1=1;o2=1;o3=0;o4=1;break;
+  52   2          case 3: o1=1;o2=1;o3=1;o4=0;break;
+  53   2          default: break;
+C51 COMPILER V9.54   TRAIN3                                                                11/05/2024 22:27:44 PAGE 2   
+
+  54   2        }
+  55   1        buff[0][j]=(buff[0][j]<<1)|k1;//把新抽样的值加到buff中
+  56   1        buff[1][j]=(buff[1][j]<<1)|k2;//把新抽样的值加到buff中
+  57   1        buff[2][j]=(buff[2][j]<<1)|k3;//把新抽样的值加到buff中
+  58   1        buff[3][j]=(buff[3][j]<<1)|k4;//把新抽样的值加到buff中
+  59   1        for(i=0;i<4;i++)
+  60   1        {
+  61   2          if (buff[i][j]==0xff)//8次采样全为1
+  62   2            cur_sta[i][j]=1;
+  63   2          else if (buff[i][j]==0x00)//全为0
+  64   2            cur_sta[i][j]=0;
+  65   2        }
+  66   1        j++;
+  67   1        if(j==4) j=0;
+  68   1      }
+  69          
+  70          char key_scan()
+  71          {
+  72   1        unsigned char key_value=-1;
+  73   1        unsigned char i=0;
+  74   1        unsigned char j=0;
+  75   1        for (j=0;j<4;j++)
+  76   1        {
+  77   2          for(i=0;i<4;i++)
+  78   2          {
+  79   3            {
+  80   4              if(cur_sta[i][j]!=pre_sta[i][j])
+  81   4              {
+  82   5                if(pre_sta[i][j])
+  83   5                {
+  84   6                  key_value=i+4*j;
+  85   6                }
+  86   5                pre_sta[i][j]=cur_sta[i][j];
+  87   5              }
+  88   4            }
+  89   3          }
+  90   2        }
+  91   1        return(key_value);//返回按键值
+  92   1      }
+  93          
+  94          void timer1_config()
+  95          {
+  96   1        TR1=1; //打开定时计数器1
+  97   1        TMOD=0x10; //定时器工作方式为1
+  98   1        //定时计数器的初始值设置
+  99   1        TH1=63536>>8;  //(65536-x)>>8
+ 100   1        TL1=63536;  //(65536-x)%256
+ 101   1        EA=1;  //中断总允许
+ 102   1        ET1=1; //定时器1中断分允许
+ 103   1      }
+ 104          
+ 105          void timer1_50ms() interrupt 3
+ 106          {
+ 107   1        TH1=63536>>8;  //重新设置初始值
+ 108   1        TL1=63536;
+ 109   1        cur_sta_update();
+ 110   1      }
+ 111          
+ 112          
+ 113          // 四舍五入函数
+ 114          int round(float value)
+ 115          {
+C51 COMPILER V9.54   TRAIN3                                                                11/05/2024 22:27:44 PAGE 3   
+
+ 116   1        return (int)(value + 0.5); 
+ 117   1      }
+ 118          
+ 119          
+ 120          unsigned int temp_integer=0;
+ 121          unsigned int temp_decimal=0;
+ 122          
+ 123          void show(float show_value)
+ 124          {
+ 125   1        unsigned char i=0;
+ 126   1        unsigned char k=0;
+ 127   1        
+ 128   1        //分离整数和小数部分
+ 129   1        temp_integer = (unsigned int)show_value; //整数部分
+ 130   1        temp_decimal = (unsigned int)(round((show_value - temp_integer) * pow(10, count)));//小数部分
+ 131   1        if (show_value==0)
+ 132   1        {
+ 133   2          disp_code[7]=seg_mode[0];
+ 134   2          k++;
+ 135   2        }
+ 136   1        else
+ 137   1        {
+ 138   2          if (flag_p==1)
+ 139   2          {
+ 140   3            while(temp_decimal)
+ 141   3            {
+ 142   4              disp_code[7-k]=seg_mode[temp_decimal%10];
+ 143   4              temp_decimal/=10;
+ 144   4              k++;
+ 145   4            }
+ 146   3          }
+ 147   2          while(temp_integer)
+ 148   2          {
+ 149   3            disp_code[7-k]=seg_mode[temp_integer%10];
+ 150   3            temp_integer/=10;
+ 151   3            k++;
+ 152   3          }
+ 153   2          if (sign==-1)  //如果符号是负号，最前面显示负号
+ 154   2          { 
+ 155   3            disp_code[7-k]=0x40;
+ 156   3            k++;
+ 157   3          }
+ 158   2          if (flag_p==1) //如果是小数，在个位数上与0x80相或显示小数点
+ 159   2            disp_code[7-count]=disp_code[7-count]|0x80;
+ 160   2        }
+ 161   1        for(i=0;i<(8-k);i++)
+ 162   1          disp_code[i]=0x00; //清除之前的显示
+ 163   1      }
+ 164          
+ 165          void key_action(unsigned char key_value)
+ 166          {
+ 167   1        static int cur_integer=0; //整数部分
+ 168   1        static int cur_point=0;  //小数部分
+ 169   1        static float cur_value_real=0;
+ 170   1        static float cur_value_unsigned=0;
+ 171   1        static float result=0;
+ 172   1        static float result_unsigned=0;
+ 173   1        static float add1=0;
+ 174   1        static unsigned char op=0;
+ 175   1        static unsigned char pre_key_value=0;
+ 176   1        if (key_value>=0 && key_value<=9) //按下数字
+ 177   1        {
+C51 COMPILER V9.54   TRAIN3                                                                11/05/2024 22:27:44 PAGE 4   
+
+ 178   2          if (flag_p==1)
+ 179   2          {
+ 180   3            cur_point=cur_point*10+key_value;
+ 181   3            count++;
+ 182   3          }
+ 183   2          else
+ 184   2          {
+ 185   3            cur_integer=cur_integer*10+key_value;
+ 186   3          }
+ 187   2          cur_value_real=(cur_integer+cur_point*pow(10,-count))*sign;
+ 188   2          cur_value_unsigned=(cur_value_real < 0) ? -cur_value_real : cur_value_real; // 计算当前值的绝对值
+ 189   2          show(cur_value_unsigned);
+ 190   2        }
+ 191   1        else if (key_value>=10 && key_value<=12) //按下符号
+ 192   1        {
+ 193   2          //判断操作数为负的情况(第一个操作数为负，或者上一个键值为操作符，紧跟着负号的情况)
+ 194   2          if ((op==0 && cur_integer==0 && result==0 && key_value==11) || (pre_key_value>=10 && pre_key_value<=12 &
+             -& key_value==11))
+ 195   2            sign=-1;
+ 196   2          else
+ 197   2          {
+ 198   3            sign=1;
+ 199   3            op=key_value;
+ 200   3          }
+ 201   2          if (flag==1) //把键入的第一个操作数存起来
+ 202   2            cur_value_real=result;
+ 203   2          add1=cur_value_real;
+ 204   2          flag=0;
+ 205   2          flag_p=0;
+ 206   2          cur_integer=0;
+ 207   2          cur_point=0;
+ 208   2        }
+ 209   1        else if (key_value==13) //按下小数点
+ 210   1        {
+ 211   2          flag_p=1;
+ 212   2          count=0; //小数点位数重新开始记录
+ 213   2          cur_point = 0; // 重置小数部分
+ 214   2          show(cur_value_unsigned);
+ 215   2        }
+ 216   1        
+ 217   1        else if (key_value==14) //按下等号
+ 218   1        {
+ 219   2          flag_p=1; //小数点判断符置1，允许结果显示小数
+ 220   2          flag=1;
+ 221   2          switch(op)
+ 222   2          {
+ 223   3            case 10: result=cur_value_real+add1;break;
+ 224   3            case 11: result=add1-cur_value_real;break;
+ 225   3            case 12: result=add1*cur_value_real;break;
+ 226   3            case 13: result=add1/cur_value_real;break;
+ 227   3            default: break;
+ 228   3          }
+ 229   2          result_unsigned = (result < 0) ? -result : result; // 计算结果的绝对值
+ 230   2          show(result_unsigned);
+ 231   2          flag_p=0;
+ 232   2          cur_integer=0;
+ 233   2          cur_point=0;
+ 234   2          cur_value_real=0;
+ 235   2        }
+ 236   1        else if (key_value==15) //按下清除键
+ 237   1        {
+ 238   2          cur_integer=0;
+C51 COMPILER V9.54   TRAIN3                                                                11/05/2024 22:27:44 PAGE 5   
+
+ 239   2          cur_point=0;
+ 240   2          cur_value_real=0;
+ 241   2          cur_value_unsigned=0;
+ 242   2          pre_key_value=0;
+ 243   2          result=0;
+ 244   2          op=0;
+ 245   2          flag=0;
+ 246   2          flag_p=0;
+ 247   2          sign=1;
+ 248   2          show(0);
+ 249   2        }
+ 250   1        pre_key_value=key_value;
+ 251   1      }
+ 252          
+ 253          void main()
+ 254          {
+ 255   1        char key_value=-1;
+ 256   1        timer1_config(); //配置定时器1
+ 257   1        while(1)
+ 258   1        {
+ 259   2          seg_led_scan();
+ 260   2          key_value=key_scan();
+ 261   2          key_action(key_value);
+ 262   2        }
+ 263   1      }
+ 264          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1376    ----
+   CONSTANT SIZE    =     11    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     90      12
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      2    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

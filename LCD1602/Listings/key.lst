@@ -1,0 +1,111 @@
+C51 COMPILER V9.54   KEY                                                                   11/09/2024 21:24:19 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE KEY
+OBJECT MODULE PLACED IN .\Objects\key.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE key.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\key.l
+                    -st) TABS(2) OBJECT(.\Objects\key.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          sbit k1=P3^0;
+   3          sbit k2=P3^1;
+   4          sbit k3=P3^2;
+   5          sbit k4=P3^3;
+   6          sbit o1=P3^4;
+   7          sbit o2=P3^5;
+   8          sbit o3=P3^6;
+   9          sbit o4=P3^7;
+  10          sbit o5=P1^0;
+  11          unsigned char cur_sta[4][5]={{1,1,1,1,1},{1,1,1,1,1},{1,1,1,1,1},{1,1,1,1,1}};
+  12          unsigned char pre_sta[4][5]={{1,1,1,1,1},{1,1,1,1,1},{1,1,1,1,1},{1,1,1,1,1}};
+  13          
+  14          void cur_sta_update()
+  15          {
+  16   1        static unsigned char buff[4][5]={{0xff,0xff,0xff,0xff,0xff},{0xff,0xff,0xff,0xff,0xff},
+  17   1                                        {0xff,0xff,0xff,0xff,0xff},{0xff,0xff,0xff,0xff,0xff}};
+  18   1        unsigned char i=0;
+  19   1        static unsigned char j=0; 
+  20   1        //消抖              
+  21   1        switch(j)
+  22   1        {
+  23   2          case 0: o1=0;o2=1;o3=1;o4=1;o5=1;break;
+  24   2          case 1: o1=1;o2=0;o3=1;o4=1;o5=1;break;
+  25   2          case 2: o1=1;o2=1;o3=0;o4=1;o5=1;break;
+  26   2          case 3: o1=1;o2=1;o3=1;o4=0;o5=1;break;
+  27   2          case 4: o1=1;o2=1;o3=1;o4=1;o5=0;break;
+  28   2          default: break;
+  29   2        }
+  30   1        buff[0][j]=(buff[0][j]<<1)|k1;//把新抽样的值加到buff中
+  31   1        buff[1][j]=(buff[1][j]<<1)|k2;//把新抽样的值加到buff中
+  32   1        buff[2][j]=(buff[2][j]<<1)|k3;//把新抽样的值加到buff中
+  33   1        buff[3][j]=(buff[3][j]<<1)|k4;//把新抽样的值加到buff中
+  34   1        for(i=0;i<4;i++)
+  35   1        {
+  36   2          if (buff[i][j]==0xff)//8次采样全为1
+  37   2            cur_sta[i][j]=1;
+  38   2          else if (buff[i][j]==0x00)//全为0
+  39   2            cur_sta[i][j]=0;
+  40   2        }
+  41   1        j++;
+  42   1        if(j==5) j=0;
+  43   1      }
+  44          
+  45          char key_scan()
+  46          {
+  47   1        unsigned char key_value=-1;
+  48   1        unsigned char i=0;
+  49   1        unsigned char j=0;
+  50   1        for (j=0;j<5;j++)
+  51   1        {
+  52   2          for(i=0;i<4;i++)
+  53   2          {
+  54   3            {
+C51 COMPILER V9.54   KEY                                                                   11/09/2024 21:24:19 PAGE 2   
+
+  55   4              if(cur_sta[i][j]!=pre_sta[i][j])
+  56   4              {
+  57   5                if(pre_sta[i][j])
+  58   5                {
+  59   6                  key_value=i+4*j;
+  60   6                }
+  61   5                pre_sta[i][j]=cur_sta[i][j];
+  62   5              }
+  63   4            }
+  64   3          }
+  65   2        }
+  66   1        return(key_value);//返回按键值
+  67   1      }
+  68          
+  69          void timer1_config()
+  70          {
+  71   1        TR1=1; //打开定时计数器1
+  72   1        TMOD=0x10; //定时器工作方式为1
+  73   1        //定时计数器的初始值设置
+  74   1        TH1=63536>>8;  //(65536-x)>>8
+  75   1        TL1=63536;  //(65536-x)%256
+  76   1        EA=1;  //中断总允许
+  77   1        ET1=1; //定时器1中断分允许
+  78   1      }
+  79          
+  80          void timer1_50ms() interrupt 3
+  81          {
+  82   1        TH1=63536>>8;  //重新设置初始值
+  83   1        TL1=63536;
+  84   1        cur_sta_update();
+  85   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    329    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     61    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

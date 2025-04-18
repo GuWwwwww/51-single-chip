@@ -1,0 +1,5 @@
+".\Objects\lcd_class.obj",
+".\Objects\lcd.obj",
+".\Objects\key.obj" 
+TO ".\Objects\lcd_class" 
+PRINT(".\Listings\lcd_class.m51")

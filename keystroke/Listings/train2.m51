@@ -1,0 +1,295 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/28/2024  20:22:21  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\train2.obj TO .\Objects\train2 PRINT (.\Listings\train2.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\train2.obj (TRAIN2)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\train2 (TRAIN2)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0021H     UNIT         ?DT?TRAIN2
+            DATA    0029H     0009H     UNIT         _DATA_GROUP_
+            IDATA   0032H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0015H     UNIT         ?PR?KEY_ACTION?TRAIN2
+                    0018H     0003H                  *** GAP ***
+            CODE    001BH     0003H     ABSOLUTE     
+            CODE    001EH     00F6H     UNIT         ?C?LIB_CODE
+            CODE    0114H     008CH     UNIT         ?C_C51STARTUP
+            CODE    01A0H     007AH     UNIT         ?PR?DISP_CODE_UPDATE?TRAIN2
+            CODE    021AH     003FH     UNIT         ?PR?TIMER1_1MS?TRAIN2
+            CODE    0259H     003DH     UNIT         ?PR?SEG_LED_SCAN?TRAIN2
+            CODE    0296H     003AH     UNIT         ?C_INITSEG
+            CODE    02D0H     0020H     UNIT         ?PR?_DELAY_MS?TRAIN2
+            CODE    02F0H     001DH     UNIT         ?PR?CUR_STA_UPDATE?TRAIN2
+            CODE    030DH     001AH     UNIT         ?PR?ALARM_ON?TRAIN2
+            CODE    0327H     0014H     UNIT         ?PR?KEY_SCAN?TRAIN2
+            CODE    033BH     0010H     UNIT         ?PR?TIMER1_CONFIG?TRAIN2
+            CODE    034BH     000EH     UNIT         ?PR?MAIN?TRAIN2
+            CODE    0359H     0008H     UNIT         ?CO?TRAIN2
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\train2 (TRAIN2)
+
+
+SEGMENT                               DATA_GROUP 
+  +--> CALLED SEGMENT               START    LENGTH
+---------------------------------------------------
+?PR?TIMER1_1MS?TRAIN2               -----    -----
+  +--> ?PR?CUR_STA_UPDATE?TRAIN2
+  +--> ?PR?DISP_CODE_UPDATE?TRAIN2
+
+?PR?CUR_STA_UPDATE?TRAIN2           0029H    0001H
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/28/2024  20:22:21  PAGE 2
+
+
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP                       -----    -----
+  +--> ?PR?MAIN?TRAIN2
+  +--> ?C_INITSEG
+
+?PR?MAIN?TRAIN2                     -----    -----
+  +--> ?PR?TIMER1_CONFIG?TRAIN2
+  +--> ?PR?SEG_LED_SCAN?TRAIN2
+  +--> ?PR?KEY_SCAN?TRAIN2
+  +--> ?PR?KEY_ACTION?TRAIN2
+
+?PR?SEG_LED_SCAN?TRAIN2             002AH    0008H
+  +--> ?CO?TRAIN2
+  +--> ?PR?_DELAY_MS?TRAIN2
+
+?PR?KEY_SCAN?TRAIN2                 002AH    0001H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\train2 (TRAIN2)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        TRAIN2
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:01A0H         PUBLIC        disp_code_update
+  B:00A0H.5       PUBLIC        beep
+  C:034BH         PUBLIC        main
+  C:0003H         PUBLIC        key_action
+  C:033BH         PUBLIC        timer1_config
+  D:0012H         PUBLIC        disp_code
+  D:0089H         PUBLIC        TMOD
+  D:001AH         PUBLIC        clock_sta
+  C:0359H         SYMBOL        _?ix1000
+  C:021AH         PUBLIC        timer1_1ms
+  D:001BH         PUBLIC        seg_mode
+  B:00A8H.3       PUBLIC        ET1
+  D:0025H         PUBLIC        key_value
+  D:008DH         PUBLIC        TH1
+  C:030DH         PUBLIC        alarm_on
+  D:008BH         PUBLIC        TL1
+  C:0327H         PUBLIC        key_scan
+  C:02D0H         PUBLIC        _delay_ms
+  B:0088H.6       PUBLIC        TR1
+  D:0026H         PUBLIC        beep_on
+  C:02F0H         PUBLIC        cur_sta_update
+  C:0259H         PUBLIC        seg_led_scan
+  D:0027H         PUBLIC        pre_sta
+  D:0028H         PUBLIC        cur_sta
+  B:00B0H.1       PUBLIC        key1
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/28/2024  20:22:21  PAGE 3
+
+
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        z
+  -------         DO            
+  D:0002H         SYMBOL        j
+  D:0004H         SYMBOL        i
+  -------         ENDDO         
+  C:02D0H         LINE#         16
+  C:02D0H         LINE#         17
+  C:02D0H         LINE#         20
+  C:02DAH         LINE#         21
+  C:02EFH         LINE#         22
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          SEG_LED_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  D:002AH         SYMBOL        bit_mode
+  -------         ENDDO         
+  C:0259H         LINE#         24
+  C:0259H         LINE#         25
+  C:0259H         LINE#         27
+  C:026CH         LINE#         29
+  C:0275H         LINE#         30
+  C:027CH         LINE#         31
+  C:0283H         LINE#         33
+  C:028BH         LINE#         34
+  C:0295H         LINE#         35
+  -------         ENDPROC       SEG_LED_SCAN
+  -------         PROC          DISP_CODE_UPDATE
+  -------         DO            
+  D:000AH         SYMBOL        sec
+  D:000BH         SYMBOL        min
+  D:000CH         SYMBOL        hour
+  -------         ENDDO         
+  C:01A0H         LINE#         37
+  C:01A0H         LINE#         38
+  C:01A0H         LINE#         42
+  C:01A2H         LINE#         43
+  C:01A7H         LINE#         44
+  C:01A7H         LINE#         45
+  C:01AAH         LINE#         46
+  C:01ACH         LINE#         47
+  C:01B1H         LINE#         48
+  C:01B1H         LINE#         49
+  C:01B3H         LINE#         50
+  C:01BBH         LINE#         51
+  C:01BBH         LINE#         52
+  C:01BBH         LINE#         53
+  C:01C9H         LINE#         54
+  C:01D5H         LINE#         55
+  C:01E3H         LINE#         56
+  C:01EFH         LINE#         57
+  C:01FDH         LINE#         58
+  C:0209H         LINE#         60
+  C:0216H         LINE#         61
+  C:0219H         LINE#         63
+  -------         ENDPROC       DISP_CODE_UPDATE
+  -------         PROC          ALARM_ON
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/28/2024  20:22:21  PAGE 4
+
+
+  -------         DO            
+  D:000DH         SYMBOL        beep_count
+  -------         ENDDO         
+  C:030DH         LINE#         65
+  C:030DH         LINE#         66
+  C:030DH         LINE#         68
+  C:030FH         LINE#         69
+  C:0317H         LINE#         70
+  C:031FH         LINE#         71
+  C:031FH         LINE#         72
+  C:0324H         LINE#         73
+  C:0326H         LINE#         74
+  C:0326H         LINE#         75
+  -------         ENDPROC       ALARM_ON
+  -------         PROC          CUR_STA_UPDATE
+  -------         DO            
+  D:000FH         SYMBOL        buff
+  D:0029H         SYMBOL        i
+  -------         ENDDO         
+  C:02F0H         LINE#         77
+  C:02F0H         LINE#         78
+  C:02F0H         LINE#         80
+  C:02F3H         LINE#         82
+  C:02FFH         LINE#         83
+  C:0302H         LINE#         84
+  C:0306H         LINE#         85
+  C:030AH         LINE#         86
+  C:030CH         LINE#         88
+  -------         ENDPROC       CUR_STA_UPDATE
+  -------         PROC          TIMER1_CONFIG
+  C:033BH         LINE#         90
+  C:033BH         LINE#         91
+  C:033BH         LINE#         92
+  C:033DH         LINE#         93
+  C:0340H         LINE#         95
+  C:0343H         LINE#         96
+  C:0346H         LINE#         97
+  C:0348H         LINE#         98
+  C:034AH         LINE#         99
+  -------         ENDPROC       TIMER1_CONFIG
+  -------         PROC          TIMER1_1MS
+  -------         DO            
+  D:0010H         SYMBOL        count
+  -------         ENDDO         
+  C:021AH         LINE#         101
+  C:0227H         LINE#         104
+  C:022AH         LINE#         105
+  C:022DH         LINE#         106
+  C:0230H         LINE#         107
+  C:0235H         LINE#         108
+  C:0235H         LINE#         109
+  C:023DH         LINE#         110
+  C:0245H         LINE#         111
+  C:0245H         LINE#         112
+  C:024BH         LINE#         113
+  C:024EH         LINE#         114
+  C:024EH         LINE#         115
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/28/2024  20:22:21  PAGE 5
+
+
+  C:024EH         LINE#         119
+  -------         ENDPROC       TIMER1_1MS
+  -------         PROC          KEY_SCAN
+  -------         DO            
+  D:002AH         SYMBOL        i
+  -------         ENDDO         
+  C:0327H         LINE#         121
+  C:0327H         LINE#         122
+  C:0327H         LINE#         124
+  C:032AH         LINE#         125
+  C:0330H         LINE#         126
+  C:0330H         LINE#         127
+  C:0334H         LINE#         128
+  C:0334H         LINE#         129
+  C:0337H         LINE#         130
+  C:0337H         LINE#         131
+  C:033AH         LINE#         132
+  C:033AH         LINE#         133
+  -------         ENDPROC       KEY_SCAN
+  -------         PROC          KEY_ACTION
+  C:0003H         LINE#         135
+  C:0003H         LINE#         136
+  C:0003H         LINE#         137
+  C:0008H         LINE#         138
+  C:0008H         LINE#         139
+  C:0014H         LINE#         140
+  C:0017H         LINE#         141
+  C:0017H         LINE#         144
+  -------         ENDPROC       KEY_ACTION
+  -------         PROC          MAIN
+  C:034BH         LINE#         146
+  C:034BH         LINE#         147
+  C:034BH         LINE#         148
+  C:034EH         LINE#         149
+  C:034EH         LINE#         150
+  C:034EH         LINE#         151
+  C:0351H         LINE#         152
+  C:0354H         LINE#         153
+  C:0357H         LINE#         154
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        TRAIN2
+
+  -------         MODULE        ?C?COPY
+  C:00EEH         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?ALARM_ON?TRAIN2
+
+Program Size: data=51.0 xdata=0 code=862
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)

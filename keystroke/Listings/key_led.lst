@@ -1,0 +1,152 @@
+C51 COMPILER V9.54   KEY_LED                                                               10/24/2024 16:32:01 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE KEY_LED
+OBJECT MODULE PLACED IN .\Objects\key_led.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE key_led.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\k
+                    -ey_led.lst) TABS(2) OBJECT(.\Objects\key_led.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #define N 8
+   3          
+   4          sbit key1 = P3^1;
+   5          sbit key2 = P3^0;
+   6          sbit led = P2^0;
+   7          unsigned char cur_sta[2]={1,1};
+   8          unsigned char pre_sta[2]={1,1};
+   9          
+  10          unsigned char seg_mode[10]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,
+  11                                  0x7f,0x6f};
+  12          unsigned char disp_code[8]={0x3f,0x3f,0x40,0x3f,0x3f,0x40,0x3f,0x3f};
+  13          
+  14          void delay_ms(unsigned int z)
+  15          {
+  16   1        unsigned int j;
+  17   1        unsigned int i;
+  18   1        for(i=0;i<z;i++)
+  19   1          for(j=0;j<125;j++);
+  20   1      }
+  21          
+  22          void seg_led_scan()
+  23          {
+  24   1        static unsigned int i;
+  25   1        unsigned char bit_mode[8]={0xff,0xfa,0xf7,0xf3,0xef,0xea,0xe7,0xe3};
+  26   1        
+  27   1        P2=bit_mode[i];  //位选信号，控制哪个数码管亮
+  28   1        P0=disp_code[i]; //段选信号，控制亮什么
+  29   1        delay_ms(1); //控制刷新率
+  30   1        //P0=0x00;  //消除鬼影
+  31   1        i++;
+  32   1        if (i==N) i=0;
+  33   1      }
+  34          
+  35          void disp_code_update(key_value)
+  36          {
+  37   1        static unsigned char sec=0;
+  38   1        static unsigned char min=0;
+  39   1        static unsigned char hour=0;
+  40   1        if (key_value==1)
+  41   1          sec++;
+  42   1        else if (key_value==2)
+  43   1          sec--;
+  44   1        if(sec==60) 
+  45   1        {
+  46   2          sec=0;
+  47   2          min++;
+  48   2          if(min==60)
+  49   2          {
+  50   3            hour++;
+  51   3            if(hour==24) hour=0;
+  52   3          }
+  53   2        }
+  54   1        disp_code[7]=seg_mode[sec%10];
+C51 COMPILER V9.54   KEY_LED                                                               10/24/2024 16:32:01 PAGE 2   
+
+  55   1        disp_code[6]=seg_mode[sec/10];
+  56   1        disp_code[4]=seg_mode[min%10];
+  57   1        disp_code[3]=seg_mode[min/10];
+  58   1        disp_code[1]=seg_mode[hour%10];
+  59   1        disp_code[0]=seg_mode[hour/10];
+  60   1      }
+  61          
+  62          void cur_sta_update()
+  63          {
+  64   1        static unsigned char buff[2]={0xff,0xff};
+  65   1        unsigned char i=0;
+  66   1        //消抖
+  67   1        buff[0]=(buff[0]<<1)|key1;//把新抽样的值加到buff中
+  68   1        buff[1]=(buff[1]<<1)|key2;//把新抽样的值加到buff中
+  69   1        for(i=0;i<2;i++)
+  70   1        {
+  71   2          if (buff[i]==0xff)//8次采样全为1
+  72   2            cur_sta[i]=1;
+  73   2          else if (buff[i]==0x00)//全为0
+  74   2            cur_sta[i]=0;
+  75   2        }
+  76   1      }
+  77          
+  78          void timer1_config()
+  79          {
+  80   1        TR1=1; //打开定时计数器1
+  81   1        TMOD=0x10; //定时器工作方式为1
+  82   1        //定时计数器的初始值设置
+  83   1        TH1=64536>>8;  //(65536-x)>>8
+  84   1        TL1=64536;  //(65536-x)%256
+  85   1        EA=1;  //中断总允许
+  86   1        ET1=1; //定时器1中断分允许
+  87   1      }
+  88          
+  89          void timer1_50ms() interrupt 3
+  90          {
+  91   1        TH1=64536>>8;  //重新设置初始值
+  92   1        TL1=64536;
+  93   1        cur_sta_update();
+  94   1      }
+  95          
+  96          unsigned char key_scan()
+  97          {
+  98   1        unsigned char key_value=0;
+  99   1        unsigned char i=0;
+ 100   1        for(i=0;i<2;i++)
+ 101   1        {
+ 102   2          if(cur_sta[i]!=pre_sta[i])
+ 103   2          {
+ 104   3            if(pre_sta[i])
+ 105   3            {
+ 106   4              key_value=i+1;
+ 107   4            }
+ 108   3            pre_sta[i]=cur_sta[i];
+ 109   3          }
+ 110   2        }
+ 111   1        return(key_value);//返回按键值
+ 112   1      }
+ 113          
+ 114          void main()
+ 115          {
+ 116   1        unsigned char key_value=0;
+C51 COMPILER V9.54   KEY_LED                                                               10/24/2024 16:32:01 PAGE 3   
+
+ 117   1        timer1_config(); //配置定时器1
+ 118   1        while(1)
+ 119   1        {
+ 120   2          seg_led_scan(); //数码管刷新函数
+ 121   2          key_value=key_scan();
+ 122   2          disp_code_update(key_value);
+ 123   2        }
+ 124   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    376    ----
+   CONSTANT SIZE    =      8    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     29       8
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
