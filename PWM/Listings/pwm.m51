@@ -1,0 +1,185 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/28/2024  16:09:52  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\pwm.obj TO .\Objects\pwm PRINT (.\Listings\pwm.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\pwm.obj (PWM)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?UIDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SLDIV)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SLSHR)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?ULDIV)
+
+
+LINK MAP OF MODULE:  .\Objects\pwm (PWM)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     000BH     UNIT         ?DT?PWM
+            DATA    0013H     0005H     UNIT         _DATA_GROUP_
+            IDATA   0018H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0018H     UNIT         ?C_INITSEG
+            CODE    001BH     0003H     ABSOLUTE     
+            CODE    001EH     0149H     UNIT         ?C?LIB_CODE
+            CODE    0167H     00A9H     UNIT         ?PR?_PWM_CONFIG?PWM
+            CODE    0210H     008CH     UNIT         ?C_C51STARTUP
+            CODE    029CH     0044H     UNIT         ?C?LDIV
+            CODE    02E0H     0020H     UNIT         ?PR?TIMER1_MS?PWM
+            CODE    0300H     000FH     UNIT         ?PR?TIMER1_CONFIG?PWM
+            CODE    030FH     000EH     UNIT         ?PR?MAIN?PWM
+            CODE    031DH     0008H     UNIT         ?CO?PWM
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\pwm (PWM)
+
+
+SEGMENT                          DATA_GROUP 
+  +--> CALLED SEGMENT          START    LENGTH
+----------------------------------------------
+?C_C51STARTUP                  -----    -----
+  +--> ?PR?MAIN?PWM
+  +--> ?C_INITSEG
+
+?PR?MAIN?PWM                   -----    -----
+  +--> ?PR?TIMER1_CONFIG?PWM
+  +--> ?PR?_PWM_CONFIG?PWM
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2024  16:09:52  PAGE 2
+
+
+
+?PR?_PWM_CONFIG?PWM            0013H    0005H
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\pwm (PWM)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        PWM
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  B:00A8H.7       PUBLIC        EA
+  C:02E0H         PUBLIC        timer1_ms
+  C:031DH         PUBLIC        level
+  C:030FH         PUBLIC        main
+  C:0300H         PUBLIC        timer1_config
+  D:000BH         PUBLIC        TH1_High
+  D:000DH         PUBLIC        TL1_High
+  D:0089H         PUBLIC        TMOD
+  B:00A8H.3       PUBLIC        ET1
+  D:008DH         PUBLIC        TH1
+  B:00A0H.0       PUBLIC        pwm_IO
+  C:0167H         PUBLIC        _PWM_config
+  D:008BH         PUBLIC        TL1
+  B:0088H.6       PUBLIC        TR1
+  D:000FH         PUBLIC        TH1_Low
+  D:0011H         PUBLIC        TL1_Low
+  -------         PROC          _PWM_CONFIG
+  D:0013H         SYMBOL        ratio
+  D:0002H         SYMBOL        period
+  -------         DO            
+  D:0014H         SYMBOL        HighvoltTime
+  D:0016H         SYMBOL        LowvoltTime
+  -------         ENDDO         
+  C:0167H         LINE#         8
+  C:016DH         LINE#         9
+  C:016DH         LINE#         12
+  C:0183H         LINE#         13
+  C:018EH         LINE#         14
+  C:01ACH         LINE#         15
+  C:01CDH         LINE#         16
+  C:01EEH         LINE#         17
+  C:020FH         LINE#         18
+  -------         ENDPROC       _PWM_CONFIG
+  -------         PROC          TIMER1_CONFIG
+  C:0300H         LINE#         20
+  C:0300H         LINE#         21
+  C:0300H         LINE#         22
+  C:0302H         LINE#         23
+  C:0305H         LINE#         25
+  C:0308H         LINE#         26
+  C:030AH         LINE#         27
+  C:030CH         LINE#         28
+  C:030EH         LINE#         29
+  -------         ENDPROC       TIMER1_CONFIG
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2024  16:09:52  PAGE 3
+
+
+  -------         PROC          TIMER1_MS
+  -------         DO            
+  D:0008H         SYMBOL        count
+  D:000AH         SYMBOL        index
+  -------         ENDDO         
+  C:02E0H         LINE#         31
+  C:02E2H         LINE#         35
+  C:02E5H         LINE#         36
+  C:02E5H         LINE#         37
+  C:02E8H         LINE#         38
+  C:02EBH         LINE#         39
+  C:02EDH         LINE#         41
+  C:02EDH         LINE#         42
+  C:02F0H         LINE#         43
+  C:02F3H         LINE#         44
+  C:02F3H         LINE#         45
+  C:02F5H         LINE#         46
+  C:02FDH         LINE#         47
+  C:02FDH         LINE#         48
+  C:02FDH         LINE#         50
+  C:02FDH         LINE#         51
+  -------         ENDPROC       TIMER1_MS
+  -------         PROC          MAIN
+  C:030FH         LINE#         53
+  C:030FH         LINE#         54
+  C:030FH         LINE#         55
+  C:0312H         LINE#         56
+  C:031BH         LINE#         57
+  C:031BH         LINE#         58
+  C:031BH         LINE#         60
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        PWM
+
+  -------         MODULE        ?C?IMUL
+  C:001EH         PUBLIC        ?C?IMUL
+  -------         ENDMOD        ?C?IMUL
+
+  -------         MODULE        ?C?UIDIV
+  C:0030H         PUBLIC        ?C?UIDIV
+  -------         ENDMOD        ?C?UIDIV
+
+  -------         MODULE        ?C?SLDIV
+  C:029CH         PUBLIC        ?C?SLDIV
+  -------         ENDMOD        ?C?SLDIV
+
+  -------         MODULE        ?C?SLSHR
+  C:0085H         PUBLIC        ?C?SLSHR
+  -------         ENDMOD        ?C?SLSHR
+
+  -------         MODULE        ?C?ULDIV
+  C:00D5H         PUBLIC        ?C?ULDIV
+  -------         ENDMOD        ?C?ULDIV
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?CO?PWM
+
+Program Size: data=25.0 xdata=0 code=805
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/28/2024  16:09:52  PAGE 4
+
+
+LINK/LOCATE RUN COMPLETE.  1 WARNING(S),  0 ERROR(S)
