@@ -1,0 +1,3 @@
+".\Objects\led_flash.obj" 
+TO ".\Objects\led_flash" 
+PRINT(".\Listings\led_flash.m51")

@@ -1,0 +1,173 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/17/2024  14:35:35  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\m_seg_led.obj TO .\Objects\m_seg_leg PRINT (.\Listings\m_seg_leg.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\m_seg_led.obj (M_SEG_LED)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?COPY)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\m_seg_leg (M_SEG_LED)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0015H     UNIT         ?DT?M_SEG_LED
+            DATA    001DH     0009H     UNIT         _DATA_GROUP_
+            IDATA   0026H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     00F6H     UNIT         ?C?LIB_CODE
+            CODE    00F9H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0185H     003DH     UNIT         ?PR?SEG_LED_SCAN?M_SEG_LED
+            CODE    01C2H     0025H     UNIT         ?PR?DISP_CODE_UPDATE?M_SEG_LED
+            CODE    01E7H     0023H     UNIT         ?PR?MAIN?M_SEG_LED
+            CODE    020AH     0020H     UNIT         ?PR?_DELAY_MS?M_SEG_LED
+            CODE    022AH     001AH     UNIT         ?C_INITSEG
+            CODE    0244H     000CH     UNIT         ?PR?TIMER1_CONFIG?M_SEG_LED
+            CODE    0250H     0008H     UNIT         ?CO?M_SEG_LED
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\m_seg_leg (M_SEG_LED)
+
+
+SEGMENT                                  DATA_GROUP 
+  +--> CALLED SEGMENT                  START    LENGTH
+------------------------------------------------------
+?C_C51STARTUP                          -----    -----
+  +--> ?PR?MAIN?M_SEG_LED
+  +--> ?C_INITSEG
+
+?PR?MAIN?M_SEG_LED                     001DH    0001H
+  +--> ?PR?TIMER1_CONFIG?M_SEG_LED
+  +--> ?PR?SEG_LED_SCAN?M_SEG_LED
+  +--> ?PR?DISP_CODE_UPDATE?M_SEG_LED
+
+?PR?SEG_LED_SCAN?M_SEG_LED             001EH    0008H
+  +--> ?CO?M_SEG_LED
+  +--> ?PR?_DELAY_MS?M_SEG_LED
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/17/2024  14:35:35  PAGE 2
+
+
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\m_seg_leg (M_SEG_LED)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        M_SEG_LED
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:00A0H         PUBLIC        P2
+  C:01C2H         PUBLIC        disp_code_update
+  C:01E7H         PUBLIC        main
+  C:0244H         PUBLIC        timer1_config
+  D:000BH         PUBLIC        disp_code
+  D:0089H         PUBLIC        TMOD
+  C:0250H         SYMBOL        _?ix1000
+  D:0013H         PUBLIC        seg_mode
+  B:0088H.7       PUBLIC        TF1
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:020AH         PUBLIC        _delay_ms
+  B:0088H.6       PUBLIC        TR1
+  C:0185H         PUBLIC        seg_led_scan
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        z
+  -------         DO            
+  D:0002H         SYMBOL        j
+  D:0004H         SYMBOL        i
+  -------         ENDDO         
+  C:020AH         LINE#         7
+  C:020AH         LINE#         8
+  C:020AH         LINE#         11
+  C:0214H         LINE#         12
+  C:0229H         LINE#         13
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          SEG_LED_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  D:001EH         SYMBOL        bit_mode
+  -------         ENDDO         
+  C:0185H         LINE#         15
+  C:0185H         LINE#         16
+  C:0185H         LINE#         18
+  C:0198H         LINE#         20
+  C:01A1H         LINE#         21
+  C:01A8H         LINE#         22
+  C:01AFH         LINE#         24
+  C:01B7H         LINE#         25
+  C:01C1H         LINE#         26
+  -------         ENDPROC       SEG_LED_SCAN
+  -------         PROC          DISP_CODE_UPDATE
+  -------         DO            
+  D:000AH         SYMBOL        count
+  -------         ENDDO         
+  C:01C2H         LINE#         28
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/17/2024  14:35:35  PAGE 3
+
+
+  C:01C2H         LINE#         29
+  C:01C2H         LINE#         31
+  C:01C4H         LINE#         32
+  C:01CCH         LINE#         33
+  C:01DAH         LINE#         34
+  C:01E6H         LINE#         35
+  -------         ENDPROC       DISP_CODE_UPDATE
+  -------         PROC          TIMER1_CONFIG
+  C:0244H         LINE#         37
+  C:0244H         LINE#         38
+  C:0244H         LINE#         39
+  C:0246H         LINE#         40
+  C:0249H         LINE#         41
+  C:024CH         LINE#         42
+  C:024FH         LINE#         43
+  -------         ENDPROC       TIMER1_CONFIG
+  -------         PROC          MAIN
+  -------         DO            
+  D:001DH         SYMBOL        count
+  -------         ENDDO         
+  C:01E7H         LINE#         45
+  C:01E7H         LINE#         46
+  C:01E7H         LINE#         47
+  C:01EAH         LINE#         49
+  C:01EDH         LINE#         50
+  C:01EDH         LINE#         51
+  C:01EDH         LINE#         52
+  C:01F0H         LINE#         53
+  C:01F3H         LINE#         54
+  C:01F3H         LINE#         55
+  C:01F5H         LINE#         56
+  C:01F8H         LINE#         57
+  C:01FBH         LINE#         58
+  C:01FDH         LINE#         59
+  C:01FDH         LINE#         60
+  C:0202H         LINE#         61
+  C:0202H         LINE#         62
+  C:0205H         LINE#         63
+  C:0208H         LINE#         64
+  C:0208H         LINE#         65
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        M_SEG_LED
+
+  -------         MODULE        ?C?COPY
+  C:00D3H         PUBLIC        ?C?COPY
+  -------         ENDMOD        ?C?COPY
+
+Program Size: data=39.0 xdata=0 code=600
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

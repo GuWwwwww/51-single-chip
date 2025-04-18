@@ -1,0 +1,120 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        09/26/2024  01:04:59  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\led_flow.obj TO .\Objects\led_flow PRINT (.\Listings\led_flow.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\led_flow.obj (LED_FLOW)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\led_flow (LED_FLOW)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0003H     UNIT         ?DT?LED_FLOW
+            IDATA   000BH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     0066H     UNIT         ?PR?_LED_RUNNING?LED_FLOW
+            CODE    00F5H     0019H     UNIT         ?PR?_DELAY_MS?LED_FLOW
+            CODE    010EH     0009H     UNIT         ?PR?MAIN?LED_FLOW
+            CODE    0117H     0008H     UNIT         ?C_INITSEG
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\led_flow (LED_FLOW)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?LED_FLOW
+  +--> ?C_INITSEG
+
+?PR?MAIN?LED_FLOW
+  +--> ?PR?_LED_RUNNING?LED_FLOW
+
+?PR?_LED_RUNNING?LED_FLOW
+  +--> ?PR?_DELAY_MS?LED_FLOW
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\led_flow (LED_FLOW)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        LED_FLOW
+BL51 BANKED LINKER/LOCATER V6.22                                                      09/26/2024  01:04:59  PAGE 2
+
+
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  C:008FH         PUBLIC        _led_running
+  C:010EH         PUBLIC        main
+  C:00F5H         PUBLIC        _delay_ms
+  -------         PROC          MAIN
+  C:010EH         LINE#         8
+  C:010EH         LINE#         9
+  C:010EH         LINE#         10
+  C:010EH         LINE#         11
+  C:010EH         LINE#         12
+  C:0115H         LINE#         13
+  -------         ENDPROC       MAIN
+  -------         PROC          _LED_RUNNING
+  D:0006H         SYMBOL        d
+  -------         DO            
+  D:0008H         SYMBOL        i
+  D:0009H         SYMBOL        flag
+  -------         ENDDO         
+  C:008FH         LINE#         16
+  C:008FH         LINE#         17
+  C:008FH         LINE#         21
+  C:0093H         LINE#         22
+  C:00A1H         LINE#         23
+  C:00A7H         LINE#         24
+  C:00B9H         LINE#         26
+  C:00B9H         LINE#         27
+  C:00BFH         LINE#         28
+  C:00CDH         LINE#         30
+  C:00DDH         LINE#         31
+  C:00E5H         LINE#         32
+  C:00E5H         LINE#         34
+  C:00EAH         LINE#         35
+  C:00ECH         LINE#         36
+  C:00F4H         LINE#         37
+  -------         ENDPROC       _LED_RUNNING
+  -------         PROC          _DELAY_MS
+  D:0007H         SYMBOL        z
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0006H         SYMBOL        j
+  -------         ENDDO         
+  C:00F5H         LINE#         39
+  C:00F5H         LINE#         40
+  C:00F5H         LINE#         42
+  C:00F6H         LINE#         43
+  C:00F7H         LINE#         44
+  C:00FCH         LINE#         45
+  C:00FCH         LINE#         46
+  C:010AH         LINE#         47
+  C:010DH         LINE#         48
+  -------         ENDPROC       _DELAY_MS
+  -------         ENDMOD        LED_FLOW
+
+Program Size: data=12.0 xdata=0 code=287
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
