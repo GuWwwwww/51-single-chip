@@ -1,4 +1,4 @@
 # 51-single-chip
 ‼️**本仓库内的所有的代码基于普中51单片机开发板所写**‼️
 ## 📂Repository Structure
-仓库中的结构分为基础模块代码编写和相关的设计应用。基础模块有：按键模块（[keystroke]()）
+仓库中的结构分为基础模块代码编写和相关的设计应用。基础模块有：LED模块([LED](https://github.com/GuWwwwww/51-single-chip/tree/main/LED))、按键模块([keystroke](https://github.com/GuWwwwww/51-single-chip/tree/main/keystroke))、七段数码管([seg_led](https://github.com/GuWwwwww/51-single-chip/tree/main/seg_led))、LCD显示模块([LCD1602](https://github.com/GuWwwwww/51-single-chip/tree/main/LCD1602))、温度传感器模块([DS18b20](https://github.com/GuWwwwww/51-single-chip/tree/main/DS18b20))、定时器模块([time_interrupt](https://github.com/GuWwwwww/51-single-chip/tree/main/time_interrupt))、PWM模块([PWM](https://github.com/GuWwwwww/51-single-chip/tree/main/PWM))、PID控制([PID](https://github.com/GuWwwwww/51-single-chip/tree/main/PID))和uart串口([uart](https://github.com/GuWwwwww/51-single-chip/tree/main/uart))。
