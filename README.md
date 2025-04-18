@@ -13,3 +13,4 @@
 
 ## 1. 智能鱼缸喂食系统
 在该设计中，采用 LCD1602、独立按键、DS1302 时钟、28BYJ-48 步进电机、ESP8266-01S 模块，实现了手动/自动/WI-FI 远程喂鱼。
+![智能鱼缸喂食系统设计/电路使用元件.png](https://github.com/GuWwwwww/51-single-chip/tree/main/智能鱼缸喂食系统设计/电路使用元件.png)
