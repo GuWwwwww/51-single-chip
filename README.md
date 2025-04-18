@@ -1,5 +1,5 @@
 # 51-single-chip
-‼️**本仓库内的所有的代码基于普中51单片机开发板所写**‼️([原理图](https://github.com/GuWwwwww/51-single-chip/tree/main/))
+‼️**本仓库内的所有的代码基于普中51单片机开发板所写**‼️([原理图](https://github.com/GuWwwwww/51-single-chip/tree/main/普中-2%26普中-3%26普中-4开发板原理图.pdf))
 ## 📂Repository Structure
 仓库中的结构分为基础模块代码编写和相关的设计应用。
 
