@@ -1,0 +1,143 @@
+C51 COMPILER V9.54   CLOCK_FLOW                                                            10/24/2024 02:09:00 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE CLOCK_FLOW
+OBJECT MODULE PLACED IN .\Objects\clock_flow.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE clock_flow.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\clock_flow.lst) TABS(2) OBJECT(.\Objects\clock_flow.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #define N 8 //数码管个数
+   3          #define M 8 //流水灯个数
+   4          #define Wx_port P3
+   5          #define Dx_port P2
+   6          #define led_port P1
+   7          unsigned char seg_mode[10]={0x3f,0x06,0x5b,0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+   8          unsigned char disp_code[8]={0x3f,0x3f,0x40,0x3f,0x3f,0x40,0x3f,0x3f};
+   9          unsigned char dir=0; //定义流水灯的方向
+  10          
+  11          void delay_ms(unsigned int z)
+  12          {
+  13   1        unsigned int j;
+  14   1        unsigned int i;
+  15   1        for(i=0;i<z;i++)
+  16   1          for(j=0;j<125;j++);
+  17   1      }
+  18          
+  19          void  seg_led_scan()
+  20          {
+  21   1        static unsigned char i=0;
+  22   1        Wx_port=(0xfe<<i)|(0xfe>>(8-i)); //位选信号，控制哪个数码管亮
+  23   1        Dx_port=disp_code[i];   //段选信号，控制亮什么
+  24   1        delay_ms(1); //控制刷新率
+  25   1        P2=0x00; //消影
+  26   1        i++;
+  27   1        if(i==N) i=0;
+  28   1      }
+  29          
+  30          void disp_code_update()
+  31          {
+  32   1        static unsigned char sec=0;
+  33   1        static unsigned char min=0;
+  34   1        static unsigned char hour=0;
+  35   1        sec++;
+  36   1        if(sec==60) 
+  37   1        {
+  38   2          sec=0;
+  39   2          min++;
+  40   2          if(min==60)
+  41   2          {
+  42   3            hour++;
+  43   3            if(hour==24) hour=0;
+  44   3          }
+  45   2        }
+  46   1        disp_code[7]=seg_mode[sec%10];
+  47   1        disp_code[6]=seg_mode[sec/10];
+  48   1        disp_code[4]=seg_mode[min%10];
+  49   1        disp_code[3]=seg_mode[min/10];
+  50   1        disp_code[1]=seg_mode[hour%10];
+  51   1        disp_code[0]=seg_mode[hour/10];
+  52   1        
+  53   1        if ((hour==0)&&(min==0)&&(sec==30)) dir=1; //在00-00-30时，流水灯开始正向流动
+  54   1        if ((hour==0)&&(min==1)&&(sec==0))  dir=2; //在00-01-00时，流水灯开始反向流动
+C51 COMPILER V9.54   CLOCK_FLOW                                                            10/24/2024 02:09:00 PAGE 2   
+
+  55   1        if ((hour==0)&&(min==1)&&(sec==30)) dir=3; //在00-01-30时，流水灯开始正反交替
+  56   1        if ((hour==0)&&(min==2)&&(sec==0))  dir=0; //在00-02-00时，流水灯停止工作
+  57   1      
+  58   1      }
+  59          
+  60          void led_running(unsigned int d)
+  61          {
+  62   1        static char i=0;
+  63   1        static int flag=0;
+  64   1        if (d==1) //流动方向为正向
+  65   1          led_port=~(0x01<<i);
+  66   1        else if (d==2) //流动方向为反向
+  67   1          led_port=~(0x80>>(8-M+i));
+  68   1        else if (d==3) //流动方向正反交替
+  69   1        {
+  70   2        if (flag==0) 
+  71   2          led_port=~(0x01<<i);
+  72   2        else
+  73   2          led_port=~(0x80>>(8-M+i));
+  74   2        if (i==(M-1)) flag^=1;
+  75   2        }
+  76   1        //delay_ms(50);每中断1次50ms亮一个灯，不再需要delay
+  77   1        i++;
+  78   1        if (i==M) i=0;
+  79   1      }
+  80          
+  81          void timer1_config()
+  82          {
+  83   1        TR1=1; //打开定时计数器1
+  84   1        TMOD=0x10; //定时器工作方式为1
+  85   1        //定时计数器的初始值设置
+  86   1        TH1=0x3c;  //(65536-x)>>8
+  87   1        TL1=0xb0;  //(65536-x)%256
+  88   1        EA=1;  //中断总允许
+  89   1        ET1=1; //定时器1中断分允许
+  90   1      }
+  91          
+  92          void timer1_50ms() interrupt 3
+  93          {
+  94   1        static unsigned char count=0;
+  95   1        TH1=0x3c;  //重新设置初始值
+  96   1        TL1=0xb0;
+  97   1        count++;
+  98   1        if (count==20)
+  99   1        {
+ 100   2          count=0;
+ 101   2          disp_code_update(); //更新控制刷新管显示的数字
+ 102   2        }
+ 103   1        led_running(dir); //每50ms亮其中一个灯,该方法的速率只能控制在50ms的整数倍
+ 104   1      }
+ 105          
+ 106          void main()
+ 107          {
+ 108   1        timer1_config(); //配置定时器1
+ 109   1        while(1)
+ 110   1        {
+ 111   2          seg_led_scan(); //数码管刷新函数
+ 112   2          
+ 113   2        }
+ 114   1      
+ 115   1      }
+
+C51 COMPILER V9.54   CLOCK_FLOW                                                            10/24/2024 02:09:00 PAGE 3   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    448    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     27    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

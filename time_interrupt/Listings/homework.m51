@@ -1,0 +1,222 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        10/24/2024  02:09:00  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\clock_flow.obj TO .\Objects\homework PRINT (.\Listings\homework.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\clock_flow.obj (CLOCK_FLOW)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\homework (CLOCK_FLOW)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     001BH     UNIT         ?DT?CLOCK_FLOW
+            IDATA   0023H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     0010H     UNIT         ?PR?TIMER1_CONFIG?CLOCK_FLOW
+            CODE    0013H     0008H     UNIT         ?PR?MAIN?CLOCK_FLOW
+            CODE    001BH     0003H     ABSOLUTE     
+            CODE    001EH     00AAH     UNIT         ?PR?DISP_CODE_UPDATE?CLOCK_FLOW
+            CODE    00C8H     008CH     UNIT         ?C_C51STARTUP
+            CODE    0154H     0069H     UNIT         ?PR?_LED_RUNNING?CLOCK_FLOW
+            CODE    01BDH     003FH     UNIT         ?PR?SEG_LED_SCAN?CLOCK_FLOW
+            CODE    01FCH     0036H     UNIT         ?PR?TIMER1_50MS?CLOCK_FLOW
+            CODE    0232H     0030H     UNIT         ?C_INITSEG
+            CODE    0262H     0020H     UNIT         ?PR?_DELAY_MS?CLOCK_FLOW
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\homework (CLOCK_FLOW)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?PR?TIMER1_50MS?CLOCK_FLOW
+  +--> ?PR?DISP_CODE_UPDATE?CLOCK_FLOW
+  +--> ?PR?_LED_RUNNING?CLOCK_FLOW
+
+*** NEW ROOT ***************************************************
+
+?C_C51STARTUP
+  +--> ?PR?MAIN?CLOCK_FLOW
+  +--> ?C_INITSEG
+
+?PR?MAIN?CLOCK_FLOW
+  +--> ?PR?TIMER1_CONFIG?CLOCK_FLOW
+  +--> ?PR?SEG_LED_SCAN?CLOCK_FLOW
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/24/2024  02:09:00  PAGE 2
+
+
+
+?PR?SEG_LED_SCAN?CLOCK_FLOW
+  +--> ?PR?_DELAY_MS?CLOCK_FLOW
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\homework (CLOCK_FLOW)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        CLOCK_FLOW
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  C:001EH         PUBLIC        disp_code_update
+  C:0154H         PUBLIC        _led_running
+  C:0013H         PUBLIC        main
+  C:0003H         PUBLIC        timer1_config
+  D:0010H         PUBLIC        disp_code
+  D:0089H         PUBLIC        TMOD
+  D:0018H         PUBLIC        dir
+  D:0019H         PUBLIC        seg_mode
+  B:00A8H.3       PUBLIC        ET1
+  D:008DH         PUBLIC        TH1
+  D:008BH         PUBLIC        TL1
+  C:0262H         PUBLIC        _delay_ms
+  B:0088H.6       PUBLIC        TR1
+  C:01BDH         PUBLIC        seg_led_scan
+  C:01FCH         PUBLIC        timer1_50ms
+  -------         PROC          _DELAY_MS
+  D:0006H         SYMBOL        z
+  -------         DO            
+  D:0002H         SYMBOL        j
+  D:0004H         SYMBOL        i
+  -------         ENDDO         
+  C:0262H         LINE#         11
+  C:0262H         LINE#         12
+  C:0262H         LINE#         15
+  C:026CH         LINE#         16
+  C:0281H         LINE#         17
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          SEG_LED_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:01BDH         LINE#         19
+  C:01BDH         LINE#         20
+  C:01BDH         LINE#         22
+  C:01DFH         LINE#         23
+  C:01E7H         LINE#         24
+  C:01EEH         LINE#         25
+  C:01F1H         LINE#         26
+  C:01F3H         LINE#         27
+  C:01FBH         LINE#         28
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/24/2024  02:09:00  PAGE 3
+
+
+  -------         ENDPROC       SEG_LED_SCAN
+  -------         PROC          DISP_CODE_UPDATE
+  -------         DO            
+  D:0009H         SYMBOL        sec
+  D:000AH         SYMBOL        min
+  D:000BH         SYMBOL        hour
+  -------         ENDDO         
+  C:001EH         LINE#         30
+  C:001EH         LINE#         31
+  C:001EH         LINE#         35
+  C:0020H         LINE#         36
+  C:0025H         LINE#         37
+  C:0025H         LINE#         38
+  C:0028H         LINE#         39
+  C:002AH         LINE#         40
+  C:002FH         LINE#         41
+  C:002FH         LINE#         42
+  C:0031H         LINE#         43
+  C:0039H         LINE#         44
+  C:0039H         LINE#         45
+  C:0039H         LINE#         46
+  C:0047H         LINE#         47
+  C:0053H         LINE#         48
+  C:0061H         LINE#         49
+  C:006DH         LINE#         50
+  C:007BH         LINE#         51
+  C:0087H         LINE#         53
+  C:0097H         LINE#         54
+  C:00A7H         LINE#         55
+  C:00B8H         LINE#         56
+  C:00C7H         LINE#         58
+  -------         ENDPROC       DISP_CODE_UPDATE
+  -------         PROC          _LED_RUNNING
+  D:0006H         SYMBOL        d
+  -------         DO            
+  D:000CH         SYMBOL        i
+  D:000DH         SYMBOL        flag
+  -------         ENDDO         
+  C:0154H         LINE#         60
+  C:0154H         LINE#         61
+  C:0154H         LINE#         64
+  C:015AH         LINE#         65
+  C:0168H         LINE#         66
+  C:016EH         LINE#         67
+  C:0180H         LINE#         68
+  C:0186H         LINE#         69
+  C:0186H         LINE#         70
+  C:018CH         LINE#         71
+  C:019AH         LINE#         73
+  C:01AAH         LINE#         74
+  C:01B2H         LINE#         75
+  C:01B2H         LINE#         77
+  C:01B4H         LINE#         78
+  C:01BCH         LINE#         79
+  -------         ENDPROC       _LED_RUNNING
+  -------         PROC          TIMER1_CONFIG
+  C:0003H         LINE#         81
+BL51 BANKED LINKER/LOCATER V6.22                                                      10/24/2024  02:09:00  PAGE 4
+
+
+  C:0003H         LINE#         82
+  C:0003H         LINE#         83
+  C:0005H         LINE#         84
+  C:0008H         LINE#         86
+  C:000BH         LINE#         87
+  C:000EH         LINE#         88
+  C:0010H         LINE#         89
+  C:0012H         LINE#         90
+  -------         ENDPROC       TIMER1_CONFIG
+  -------         PROC          TIMER1_50MS
+  -------         DO            
+  D:000FH         SYMBOL        count
+  -------         ENDDO         
+  C:01FCH         LINE#         92
+  C:020BH         LINE#         95
+  C:020EH         LINE#         96
+  C:0211H         LINE#         97
+  C:0213H         LINE#         98
+  C:0218H         LINE#         99
+  C:0218H         LINE#         100
+  C:021BH         LINE#         101
+  C:021EH         LINE#         102
+  C:021EH         LINE#         103
+  C:0225H         LINE#         104
+  -------         ENDPROC       TIMER1_50MS
+  -------         PROC          MAIN
+  C:0013H         LINE#         106
+  C:0013H         LINE#         107
+  C:0013H         LINE#         108
+  C:0016H         LINE#         109
+  C:0016H         LINE#         110
+  C:0016H         LINE#         111
+  C:0019H         LINE#         113
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        CLOCK_FLOW
+
+Program Size: data=36.0 xdata=0 code=642
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

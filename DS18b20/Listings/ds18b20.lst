@@ -1,0 +1,211 @@
+C51 COMPILER V9.54   DS18B20                                                               12/26/2024 10:35:25 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE DS18B20
+OBJECT MODULE PLACED IN .\Objects\ds18b20.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE ds18b20.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\d
+                    -s18b20.lst) TABS(2) OBJECT(.\Objects\ds18b20.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #define Real_temp -1  // 定义一个表示读取失败的温度值
+   3          sbit RS=P2^6; //数据命令选择端口
+   4          sbit RW=P2^4; //写入或读出选择
+   5          sbit E=P2^7;  //LCD使能端口
+   6          sbit DQ=P3^7; //定义DS18b20的管脚
+   7          
+   8          void delay(unsigned int t)//延时子程序
+   9          {
+  10   1        for(;t>0;t--);
+  11   1      }
+  12          
+  13          
+  14          unsigned char Init_DS18B20()//初始化DS18B20
+  15          {
+  16   1        unsigned char x=0;
+  17   1        DQ = 1;      //DQ复位
+  18   1        delay(8);    //稍做延时
+  19   1        DQ = 0;      //单片机将DQ拉低
+  20   1        delay(80);   //精确延时，大于480us
+  21   1        DQ = 1;      //拉高总线
+  22   1        delay(8);
+  23   1        x = DQ;      //稍做延时后，如果x=0则初始化成功，x=1则初始化失败
+  24   1        delay(4);
+  25   1        return x;
+  26   1      }
+  27          
+  28          unsigned char ReadOneChar()//读一个字节
+  29          {
+  30   1        unsigned char i=0;
+  31   1        unsigned char dat = 0;
+  32   1        for (i=8;i>0;i--)
+  33   1        {
+  34   2          DQ = 0;     // 给脉冲信号
+  35   2          dat>>=1;
+  36   2          DQ = 1;     // 给脉冲信号
+  37   2          if(DQ)
+  38   2            dat|=0x80;
+  39   2        delay(4);
+  40   2        }
+  41   1        return(dat);
+  42   1      }
+  43          
+  44          /*****写一个字节*****/
+  45          void WriteOneChar(unsigned char dat)
+  46          {
+  47   1        unsigned char i=0;
+  48   1        for (i=8; i>0; i--)
+  49   1        {
+  50   2          DQ = 0;
+  51   2          DQ = dat&0x01;
+  52   2        delay(4);
+  53   2          DQ = 1;
+  54   2          dat>>=1;
+C51 COMPILER V9.54   DS18B20                                                               12/26/2024 10:35:25 PAGE 2   
+
+  55   2        }
+  56   1        delay(4);
+  57   1      }
+  58          
+  59          /*****读取温度*****/
+  60          int ReadTemperature()
+  61          {
+  62   1          unsigned char a=0;
+  63   1          unsigned char b=0;
+  64   1          unsigned int t=0;
+  65   1          t=Init_DS18B20();
+  66   1          if(t) return Real_temp;
+  67   1          WriteOneChar(0xCC);  //跳过读序号列号的操作
+  68   1          WriteOneChar(0x44);  //启动温度转换
+  69   1          t=Init_DS18B20();
+  70   1          if(t) return Real_temp;
+  71   1          WriteOneChar(0xCC);  //跳过读序号列号的操作
+  72   1          WriteOneChar(0xBE);  //读取温度寄存器
+  73   1          a=ReadOneChar();     //读低8位
+  74   1          b=ReadOneChar();     //读高8位
+  75   1          t=b;
+  76   1          t<<=8;
+  77   1          t=t|a;
+  78   1          if(t<=0||t>0x900) 
+  79   1        return Real_temp;
+  80   1        t=t*0.625+0.5;
+  81   1          return(t);
+  82   1      }
+  83          
+  84          void delay_ms(unsigned char z)
+  85          {
+  86   1        unsigned char i,j;
+  87   1        for(i=0;i<z;i++)
+  88   1          for(j=0;j<125;j++);
+  89   1      }
+  90          
+  91          unsigned char lcd_read_state() //读状态，确定LCD是否繁忙
+  92          {
+  93   1        unsigned char state;
+  94   1        RS=0;
+  95   1        RW=1;
+  96   1        E=1; //LCD使能
+  97   1        delay_ms(2);
+  98   1        state=P0&0X80;
+  99   1        E=0;//关闭使能
+ 100   1        return(state);
+ 101   1      }
+ 102          
+ 103          void lcd_write_cmd(unsigned cmd)
+ 104          {
+ 105   1        while(lcd_read_state());//等待繁忙结束
+ 106   1        RS=0;//表示写入的是指令
+ 107   1        RW=0;//写入状态
+ 108   1        P0=cmd;
+ 109   1        E=1;//使能LCD
+ 110   1        delay_ms(2);
+ 111   1        E=0;//命令发送完毕，关闭使能
+ 112   1      }
+ 113          
+ 114          void lcd_write_dat(unsigned char dat)
+ 115          {
+ 116   1        while(lcd_read_state());//等待繁忙结束
+C51 COMPILER V9.54   DS18B20                                                               12/26/2024 10:35:25 PAGE 3   
+
+ 117   1        RS=1;//表示写入的是数据
+ 118   1        RW=0;//写入状态
+ 119   1        P0=dat;
+ 120   1        E=1;//使能LCD
+ 121   1        delay_ms(2);
+ 122   1        E=0;//数据发送完毕，关闭使能
+ 123   1      }
+ 124          
+ 125          void lcd_init()
+ 126          {
+ 127   1        lcd_write_cmd(0x38);//5x7显示，8位数据总线，两行显示
+ 128   1        lcd_write_cmd(0x0c);//打开显示，光标不显示
+ 129   1        lcd_write_cmd(0x06);//光标右移，整屏不移动
+ 130   1        lcd_write_cmd(0x01);//清屏
+ 131   1        delay_ms(10);
+ 132   1      }
+ 133          
+ 134          void cursor_set(unsigned char x, unsigned char y)
+ 135          {
+ 136   1        unsigned char addr=0;
+ 137   1        if (x==0)//表明第一行
+ 138   1        {
+ 139   2          addr=0x80+y;
+ 140   2        }
+ 141   1        else if (x==1)
+ 142   1        {
+ 143   2          addr=0x80+y+0x40;
+ 144   2        }
+ 145   1        lcd_write_cmd(addr);
+ 146   1      }
+ 147          
+ 148          int Pow(int x,int y)
+ 149          {
+ 150   1        unsigned char i;
+ 151   1        int result = 1;
+ 152   1        for(i = 0; i < y; i++)
+ 153   1        {
+ 154   2          result *= x;
+ 155   2        }
+ 156   1        return result;
+ 157   1      }
+ 158          
+ 159          void lcd_ShowNum(unsigned char x,unsigned char y,unsigned int number,unsigned char length)
+ 160          {
+ 161   1        unsigned char i;
+ 162   1        unsigned char temp;
+ 163   1        cursor_set(x,y);
+ 164   1        for(i=length;i>0;i--)
+ 165   1        {
+ 166   2          temp=number/Pow(10,i-1)%10+'0'; //循环将每一位都提取出来并转换为字符
+ 167   2          lcd_write_dat(temp);
+ 168   2        }
+ 169   1      }
+ 170          
+ 171          void main()
+ 172          {
+ 173   1        unsigned char t;
+ 174   1        while(Init_DS18B20());
+ 175   1        lcd_init();
+ 176   1        while(1)
+ 177   1        {
+ 178   2          t=ReadTemperature();
+C51 COMPILER V9.54   DS18B20                                                               12/26/2024 10:35:25 PAGE 4   
+
+ 179   2          lcd_ShowNum(0,5,t,2);
+ 180   2        }
+ 181   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    490    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       9
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

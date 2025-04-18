@@ -1,0 +1,106 @@
+C51 COMPILER V9.54   OLED_TRAIN                                                            11/29/2024 11:40:37 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE OLED_TRAIN
+OBJECT MODULE PLACED IN .\Objects\oled_train.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE oled_train.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\oled_train.lst) TABS(2) OBJECT(.\Objects\oled_train.obj)
+
+line level    source
+
+   1          #include<reg51.h>
+   2          #include<intrins.h>
+   3          #define N 16
+   4          sbit DS1=P2^2;
+   5          sbit rck1=P2^1;
+   6          sbit sck1=P2^0;
+   7          sbit DS2=P3^2;
+   8          sbit rck2=P3^1;
+   9          sbit sck2=P3^0;
+  10          unsigned char disp_code1[16]={0x00,0x80,0x40,0x20,0x10,0x08,0x04,0x02,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0
+             -x00};
+  11          unsigned char disp_code2[16]={0x00,0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x40,0x20,0x10,0x08,0x04,0x02,0x01,0
+             -x00};
+  12          
+  13          void delay_ms(unsigned char z)
+  14          {
+  15   1        unsigned int i,j;
+  16   1        for(i=0;i<z;i++)
+  17   1          for(j=0;j<125;j++);
+  18   1      }
+  19          
+  20          void write_74HC595_row(unsigned char Dat)
+  21          {
+  22   1        unsigned char i=0;
+  23   1        for(i=0;i<8;i++)
+  24   1        {
+  25   2          DS1 = (Dat >> 7);
+  26   2          Dat <<= 1;
+  27   2          sck1=0;
+  28   2          _nop_();
+  29   2          _nop_();
+  30   2          sck1=1;
+  31   2        }
+  32   1        rck1=0;
+  33   1        _nop_();
+  34   1        _nop_();
+  35   1        rck1=1;
+  36   1      }
+  37          
+  38          void write_74HC595_column(unsigned char Dat)
+  39          {
+  40   1        unsigned char i=0;
+  41   1        for(i=0;i<8;i++)
+  42   1        {
+  43   2          DS2 = (Dat >> 7);
+  44   2          Dat <<= 1;
+  45   2          sck2=0;
+  46   2          _nop_();
+  47   2          _nop_();
+  48   2          sck2=1;
+  49   2        }
+  50   1        rck2=0;
+  51   1        _nop_();
+  52   1        _nop_();
+C51 COMPILER V9.54   OLED_TRAIN                                                            11/29/2024 11:40:37 PAGE 2   
+
+  53   1        rck2=1;
+  54   1      }
+  55          
+  56          void oled_scan()
+  57          {
+  58   1        static unsigned char i=0;
+  59   1        static unsigned char j=0;
+  60   1        unsigned char temp;
+  61   1        temp=~(0x0001<<i);//控制哪列灯亮
+  62   1        write_74HC595_column(temp);
+  63   1        write_74HC595_row(disp_code2[j]);
+  64   1        write_74HC595_row(disp_code1[j]);
+  65   1        delay_ms(1);//控制刷新率
+  66   1        i++;
+  67   1        j++;
+  68   1        if(i==N) i=0;
+  69   1        if(j==16) j=0;
+  70   1      }
+  71          
+  72          void main()
+  73          {
+  74   1        while(1)
+  75   1        {
+  76   2          oled_scan();
+  77   2        }
+  78   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    172    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     34    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

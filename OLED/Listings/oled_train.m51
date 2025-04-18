@@ -1,0 +1,176 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/29/2024  11:40:37  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\oled_train.obj TO .\Objects\oled_train PRINT (.\Listings\oled_train.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\oled_train.obj (OLED_TRAIN)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\oled_train (OLED_TRAIN)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0022H     UNIT         ?DT?OLED_TRAIN
+            IDATA   002AH     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     0040H     UNIT         ?PR?OLED_SCAN?OLED_TRAIN
+            CODE    00CFH     002BH     UNIT         ?C_INITSEG
+            CODE    00FAH     0023H     UNIT         ?PR?_DELAY_MS?OLED_TRAIN
+            CODE    011DH     0022H     UNIT         ?PR?_WRITE_74HC595_ROW?OLED_TRAIN
+            CODE    013FH     0022H     UNIT         ?PR?_WRITE_74HC595_COLUMN?OLED_TRAIN
+            CODE    0161H     0005H     UNIT         ?PR?MAIN?OLED_TRAIN
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\oled_train (OLED_TRAIN)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?OLED_TRAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?OLED_TRAIN
+  +--> ?PR?OLED_SCAN?OLED_TRAIN
+
+?PR?OLED_SCAN?OLED_TRAIN
+  +--> ?PR?_WRITE_74HC595_COLUMN?OLED_TRAIN
+  +--> ?PR?_WRITE_74HC595_ROW?OLED_TRAIN
+  +--> ?PR?_DELAY_MS?OLED_TRAIN
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\oled_train (OLED_TRAIN)
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/29/2024  11:40:37  PAGE 2
+
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        OLED_TRAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  D:00B0H         PUBLIC        P3
+  C:013FH         PUBLIC        _write_74HC595_column
+  C:0161H         PUBLIC        main
+  C:008FH         PUBLIC        oled_scan
+  B:00A0H.2       PUBLIC        DS1
+  B:00B0H.2       PUBLIC        DS2
+  C:00FAH         PUBLIC        _delay_ms
+  D:000AH         PUBLIC        disp_code1
+  D:001AH         PUBLIC        disp_code2
+  C:011DH         PUBLIC        _write_74HC595_row
+  B:00A0H.1       PUBLIC        rck1
+  B:00B0H.1       PUBLIC        rck2
+  B:00A0H.0       PUBLIC        sck1
+  B:00B0H.0       PUBLIC        sck2
+  -------         PROC          _DELAY_MS
+  D:0007H         SYMBOL        z
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:00FAH         LINE#         13
+  C:00FAH         LINE#         14
+  C:00FAH         LINE#         16
+  C:0107H         LINE#         17
+  C:011CH         LINE#         18
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          _WRITE_74HC595_ROW
+  D:0007H         SYMBOL        Dat
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:011DH         LINE#         20
+  C:011DH         LINE#         21
+  C:011DH         LINE#         22
+  C:011FH         LINE#         23
+  C:011FH         LINE#         24
+  C:011FH         LINE#         25
+  C:012AH         LINE#         26
+  C:012EH         LINE#         27
+  C:0130H         LINE#         28
+  C:0131H         LINE#         29
+  C:0132H         LINE#         30
+  C:0134H         LINE#         31
+  C:0138H         LINE#         32
+  C:013AH         LINE#         33
+  C:013BH         LINE#         34
+  C:013CH         LINE#         35
+  C:013EH         LINE#         36
+  -------         ENDPROC       _WRITE_74HC595_ROW
+  -------         PROC          _WRITE_74HC595_COLUMN
+  D:0007H         SYMBOL        Dat
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/29/2024  11:40:37  PAGE 3
+
+
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:013FH         LINE#         38
+  C:013FH         LINE#         39
+  C:013FH         LINE#         40
+  C:0141H         LINE#         41
+  C:0141H         LINE#         42
+  C:0141H         LINE#         43
+  C:014CH         LINE#         44
+  C:0150H         LINE#         45
+  C:0152H         LINE#         46
+  C:0153H         LINE#         47
+  C:0154H         LINE#         48
+  C:0156H         LINE#         49
+  C:015AH         LINE#         50
+  C:015CH         LINE#         51
+  C:015DH         LINE#         52
+  C:015EH         LINE#         53
+  C:0160H         LINE#         54
+  -------         ENDPROC       _WRITE_74HC595_COLUMN
+  -------         PROC          OLED_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  D:0009H         SYMBOL        j
+  D:0007H         SYMBOL        temp
+  -------         ENDDO         
+  C:008FH         LINE#         56
+  C:008FH         LINE#         57
+  C:008FH         LINE#         61
+  C:009EH         LINE#         62
+  C:00A1H         LINE#         63
+  C:00ABH         LINE#         64
+  C:00B5H         LINE#         65
+  C:00BAH         LINE#         66
+  C:00BCH         LINE#         67
+  C:00BEH         LINE#         68
+  C:00C6H         LINE#         69
+  C:00CEH         LINE#         70
+  -------         ENDPROC       OLED_SCAN
+  -------         PROC          MAIN
+  C:0161H         LINE#         72
+  C:0161H         LINE#         73
+  C:0161H         LINE#         74
+  C:0161H         LINE#         75
+  C:0161H         LINE#         76
+  C:0164H         LINE#         77
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        OLED_TRAIN
+
+Program Size: data=43.0 xdata=0 code=358
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,135 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/26/2024  19:58:32  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\oled_class.obj TO .\Objects\oled_class PRINT (.\Listings\oled_class.m51)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\oled_class.obj (OLED_CLASS)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_INIT)
+
+
+LINK MAP OF MODULE:  .\Objects\oled_class (OLED_CLASS)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0009H     UNIT         ?DT?OLED_CLASS
+            IDATA   0011H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+            CODE    0003H     008CH     UNIT         ?C_C51STARTUP
+            CODE    008FH     002CH     UNIT         ?PR?_WRITE_74HC595?OLED_CLASS
+            CODE    00BBH     002AH     UNIT         ?PR?OLED_SCAN?OLED_CLASS
+            CODE    00E5H     0023H     UNIT         ?PR?_DELAY_MS?OLED_CLASS
+            CODE    0108H     000EH     UNIT         ?C_INITSEG
+            CODE    0116H     0005H     UNIT         ?PR?MAIN?OLED_CLASS
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\oled_class (OLED_CLASS)
+
+
+SEGMENT
+  +--> CALLED SEGMENT
+---------------------
+?C_C51STARTUP
+  +--> ?PR?MAIN?OLED_CLASS
+  +--> ?C_INITSEG
+
+?PR?MAIN?OLED_CLASS
+  +--> ?PR?OLED_SCAN?OLED_CLASS
+
+?PR?OLED_SCAN?OLED_CLASS
+  +--> ?PR?_WRITE_74HC595?OLED_CLASS
+  +--> ?PR?_DELAY_MS?OLED_CLASS
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\oled_class (OLED_CLASS)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/26/2024  19:58:32  PAGE 2
+
+
+
+  -------         MODULE        OLED_CLASS
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:00B0H         PUBLIC        P3
+  B:00B0H.4       PUBLIC        DS
+  C:0116H         PUBLIC        main
+  C:008FH         PUBLIC        _write_74HC595
+  C:00BBH         PUBLIC        oled_scan
+  D:0009H         PUBLIC        disp_code
+  B:00B0H.5       PUBLIC        rck
+  B:00B0H.6       PUBLIC        sck
+  C:00E5H         PUBLIC        _delay_ms
+  -------         PROC          _DELAY_MS
+  D:0007H         SYMBOL        z
+  -------         DO            
+  D:0004H         SYMBOL        i
+  D:0002H         SYMBOL        j
+  -------         ENDDO         
+  C:00E5H         LINE#         7
+  C:00E5H         LINE#         8
+  C:00E5H         LINE#         10
+  C:00F2H         LINE#         11
+  C:0107H         LINE#         12
+  -------         ENDPROC       _DELAY_MS
+  -------         PROC          _WRITE_74HC595
+  D:0005H         SYMBOL        Dat
+  -------         DO            
+  D:0003H         SYMBOL        i
+  -------         ENDDO         
+  C:008FH         LINE#         14
+  C:0091H         LINE#         15
+  C:0091H         LINE#         16
+  C:0093H         LINE#         17
+  C:0093H         LINE#         18
+  C:0093H         LINE#         19
+  C:00AEH         LINE#         20
+  C:00B0H         LINE#         21
+  C:00B2H         LINE#         22
+  C:00B6H         LINE#         23
+  C:00B8H         LINE#         24
+  C:00BAH         LINE#         25
+  -------         ENDPROC       _WRITE_74HC595
+  -------         PROC          OLED_SCAN
+  -------         DO            
+  D:0008H         SYMBOL        i
+  -------         ENDDO         
+  C:00BBH         LINE#         27
+  C:00BBH         LINE#         28
+  C:00BBH         LINE#         30
+  C:00CBH         LINE#         31
+  C:00D5H         LINE#         32
+  C:00DAH         LINE#         33
+  C:00DCH         LINE#         34
+  C:00E4H         LINE#         35
+  -------         ENDPROC       OLED_SCAN
+  -------         PROC          MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/26/2024  19:58:32  PAGE 3
+
+
+  C:0116H         LINE#         37
+  C:0116H         LINE#         38
+  C:0116H         LINE#         39
+  C:0116H         LINE#         40
+  C:0116H         LINE#         41
+  C:0119H         LINE#         42
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        OLED_CLASS
+
+Program Size: data=18.0 xdata=0 code=283
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
